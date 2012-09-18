@@ -2,14 +2,107 @@
 <html>
 <head>
     <meta name="author" content="Loek van den Ouweland">
-    <title>Jinq</title>
+    <title>Jinq, a library to perform list manipulations in javascript. Like Linq</title>
     <link rel="stylesheet" href="screen.css">
     <script src="jinq.js"></script>
 </head>
 <body>
 <div id="canvas">
     <h1>Jinq</h1>
+    <p>
+        This project started as a test to mimic my favorite .NET features: <strong>Extension Methods</strong> and <strong>Linq</strong>.
+        It combines two Javascript techniques:
+    </p>
+    <ul>
+        <li>Add functionality to an object (like Array) with the prototype keyword</li>
+        <li>The ability to create a function from a string</li>
+    </ul>
+    <p>
+        This lead to a library (jinq.js) that supports my most used Linq methods and I find myself using this library
+        in almost all of my Javascript projects. A big thanks goes to Chris Meijers. His <strong>createJinqFunction</strong> function made
+        everything much more generic. He also contributed great methods like <strong>SelectMany</strong>.
+    </p>
+    <p>
+        Cheers, Loek
+    </p>
+
+    <h2>app.employees</h2>
+    <ul id="allEmployees"></ul>
+
+    <h2>app.employees.Where("x.salary>2000")</h2>
+    <ul id="where"></ul>
+
+    <h2>app.employees.FirstOrDefault("x.city === 'Eindhoven'")</h2>
+
+    <div id="firstordefault"></div>
+
+    <h2>app.employees.FirstOrDefault("x.city === 'London'")</h2>
+
+    <div id="firstordefault2"></div>
+
+    <h2>app.employees.Select("x.salary")</h2>
+    <ul id="salaries"></ul>
+
+    <h2>app.employees.SelectMany("x.projects")</h2>
+    <ul id="projects"></ul>
+
+    <h2>app.employees.SelectMany("x.projects").Distinct(("x"))</h2>
+    <ul id="distinctprojects"></ul>
+
+    <p>
+        I hope you can use jinq.js in your projects. I'm fairly new to Javascript so if you have comments, please
+        let me know at info@loekvandenouweland.com. O, as always...use at you own risk!
+    </p>
+
 </div>
+<script type="text/javascript">
+    // create a list of employees
+    app = {
+        self:this,
+        employees:[
+            { name:"Vera", salary:1500, city:"Eindhoven", projects:["Project X", "Project Y"] },
+            { name:"Chuck", salary:2500, city:"Munich", projects:["Project X", "Project Z"] },
+            { name:"Dave", salary:4500, city:"Solothurn", projects:["Project Z", "Project Y"] }
+        ]
+    };
+
+    // helper to print a list of items
+    app.print = function (ulId, list) {
+        var ul = document.getElementById(ulId);
+        for (var i = 0; i < list.length; i += 1) {
+            var li = document.createElement("li");
+            if (typeof list[i] === "string" || typeof list[i] === "number") {
+                li.innerHTML += "<span>" + list[i] + "</span>";
+            } else {
+                for (var prop in list[i]) {
+                    if (list[i].hasOwnProperty(prop)) {
+                        li.innerHTML += "<span>" + list[i][prop] + "</span>";
+                    }
+                }
+            }
+            ul.insertBefore(li, ul.firstChild);
+        }
+    }
+
+    // helper to print an item
+    app.printItem = function (divId, item) {
+        var div = document.getElementById(divId);
+        if (item) {
+            div.innerHTML = "<span>" + item.name + "</span><span>" + item.salary + "</span><span>" + item.city + "</span>";
+        } else {
+            div.innerHTML = "---";
+        }
+    }
+
+    // perform jinq queries on app.employees
+    app.print("allEmployees", app.employees);
+    app.print("where", app.employees.Where("x.salary>2000"));
+    app.printItem("firstordefault", app.employees.FirstOrDefault("x.city === 'Eindhoven'"));
+    app.printItem("firstordefault2", app.employees.FirstOrDefault("x.city === 'London'"));
+    app.print("salaries", app.employees.Select("x.salary"));
+    app.print("projects", app.employees.SelectMany("x.projects"));
+    app.print("distinctprojects", app.employees.SelectMany("x.projects").Distinct(("x")));
+</script>
 </body>
 </html>
 

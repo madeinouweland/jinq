@@ -1,6 +1,10 @@
+// jinq.js
+// created: 2012-09-18
+// author: Loek van den Ouweland
+
 Array.prototype.Where = function (body) {
     var list = [];
-    var criterium = createFunction(body);
+    var criterium = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         if (criterium(this[i])) {
             list.push(this[i]);
@@ -10,7 +14,7 @@ Array.prototype.Where = function (body) {
 }
 
 Array.prototype.FirstOrDefault = function (body) {
-    var criterium = createFunction(body);
+    var criterium = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         if (criterium(this[i])) {
             return this[i];
@@ -21,7 +25,7 @@ Array.prototype.FirstOrDefault = function (body) {
 
 Array.prototype.Select = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         var item = selecter(this[i]);
         list.push(item);
@@ -31,7 +35,7 @@ Array.prototype.Select = function (body) {
 
 Array.prototype.SelectMany = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         var sublist = selecter(this[i]);
         {
@@ -44,7 +48,7 @@ Array.prototype.SelectMany = function (body) {
 }
 
 Array.prototype.OrderBy = function (body) {
-    var sortMethod = createFunction(body);
+    var sortMethod = createJinqFunction(body);
     this.sort(function (a, b) {
         return sortMethod(a) - sortMethod(b)
     });
@@ -59,7 +63,7 @@ Array.prototype.Count = function (body) {
 
 Array.prototype.Exists = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         var item = selecter(this[i]);
         if (item)
@@ -70,7 +74,7 @@ Array.prototype.Exists = function (body) {
 
 Array.prototype.Distinct = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         var exists = false;
         var item = selecter(this[i]);
@@ -90,7 +94,7 @@ Array.prototype.Distinct = function (body) {
 }
 
 Array.prototype.Foreach = function (body) {
-    var processor = createFunction(body);
+    var processor = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         processor(this[i]);
     }
@@ -101,7 +105,7 @@ Array.prototype.Foreach = function (body) {
 Array.prototype.Take = function (count) {
     var length = count;
     var list = [];
-    var selecter = createFunction("x");
+    var selecter = createJinqFunction("x");
 
     if (length > this.length) {
         length = this.length;
@@ -114,7 +118,7 @@ Array.prototype.Take = function (count) {
 
 Array.prototype.Remove = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         var item = selecter(this[i]);
 
@@ -128,7 +132,7 @@ Array.prototype.Remove = function (body) {
 
 Array.prototype.Max = function (body) {
     var list = [];
-    var getvalue = createFunction(body);
+    var getvalue = createJinqFunction(body);
     var max = null;
     for (var i = 0; i < this.length; i += 1) {
         var current = getvalue(this[i]);
@@ -140,7 +144,7 @@ Array.prototype.Max = function (body) {
 
 Array.prototype.Min = function (body) {
     var list = [];
-    var getvalue = createFunction(body);
+    var getvalue = createJinqFunction(body);
     var val = null;
     for (var i = 0; i < this.length; i += 1) {
         var current = getvalue(this[i]);
@@ -151,7 +155,7 @@ Array.prototype.Min = function (body) {
 }
 
 Array.prototype.Sum = function (body) {
-    var sumMethod = createFunction(body);
+    var sumMethod = createJinqFunction(body);
     var total = 0.0;
     for (var i = 0; i < this.length; i += 1) {
         total = total + sumMethod(this[i]);
@@ -160,7 +164,7 @@ Array.prototype.Sum = function (body) {
 }
 
 Array.prototype.Average = function (body) {
-    var sumMethod = createFunction(body);
+    var sumMethod = createJinqFunction(body);
     var total = 0.0;
     for (var i = 0; i < this.length; i += 1) {
         total = total + sumMethod(this[i]);
@@ -170,15 +174,13 @@ Array.prototype.Average = function (body) {
 
 Array.prototype.Dump = function (body) {
     var list = [];
-    var selecter = createFunction(body);
+    var selecter = createJinqFunction(body);
     for (var i = 0; i < this.length; i += 1) {
         console.log("" + selecter(this[i]));
     }
     return list;
 }
 
-///// een array kan gaten bevatten. misschien is tolist een mooie gelegenheid om die eruit te halen met een for-loop
-///// i.p.v push(this)
 Object.prototype.ToList = function () {
     var list = [];
     list.push(this);
@@ -196,7 +198,6 @@ Object.prototype.ToString = function (separator) {
     return list;
 }
 
-function createFunction(body) {
-    //alert(body);
+function createJinqFunction(body) {
     return new Function("x", "return " + body);
 }
