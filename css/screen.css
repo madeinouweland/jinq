@@ -1,0 +1,35 @@
+body {
+    background: #fff;
+    color: #2f2928;
+    font-family: "Helvetica Neue", Helvetica, Arial;
+    line-height: 1.5em;
+}
+
+#canvas {
+    width: 960px;
+    margin: 0px auto;
+}
+
+h1, h2, h3, h4{
+    font-weight: bold;
+    color: #333;
+}
+h1 {
+    padding-left: 300px;
+    font-weight: bold;
+    line-height: 60px;
+    font-size: 61px;
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin-bottom: 6px;
+    letter-spacing: -0.05em;
+    text-transform: lowercase;
+    line-height: 30px;
+    font-size: 31px;
+    padding: 0px 0px 8px 300px;
+    border-bottom: 1px solid #6d746d;
+    clear: left;
+}
+
