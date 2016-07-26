@@ -1,6 +1,6 @@
 // jinq.js
 // created: 2012-09-18
-// author: Loek van den Ouweland
+// author: Loek van den Ouweland2
 
 Array.prototype.Where = function (body) {
     var list = [];
